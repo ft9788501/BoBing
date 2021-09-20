@@ -1,11 +1,14 @@
 ﻿using BoBing.Shared.Data;
+using BoBing.Shared.Hubs;
 using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using System.Linq;
 
 namespace BoBing.Server
 {
@@ -24,24 +27,19 @@ namespace BoBing.Server
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddSignalR();
+            services.AddResponseCompression((rco) =>
+            {
+                rco.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                    new[] { "application/octet-stream" });
+            });
 
             services.AddBootstrapBlazor(localizationAction: options =>
             {
                 options.AdditionalJsonAssemblies = new[] { GetType().Assembly };
             });
 
-            services.AddRequestLocalization<IOptions<BootstrapBlazorOptions>>((localizerOption, blazorOption) =>
-            {
-                var supportedCultures = blazorOption.Value.GetSupportedCultures();
-
-                localizerOption.SupportedCultures = supportedCultures;
-                localizerOption.SupportedUICultures = supportedCultures;
-            });
-
-            services.AddSingleton<WeatherForecastService>();
-
-            // 增加 Table 数据服务操作类
-            services.AddTableDemoDataService();
+            services.AddSingleton<BoBingRoomsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,8 +53,7 @@ namespace BoBing.Server
             {
                 app.UseExceptionHandler("/Error");
             }
-
-            app.UseRequestLocalization(app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>().Value);
+            app.UseResponseCompression();
 
             app.UseStaticFiles();
 
@@ -65,6 +62,7 @@ namespace BoBing.Server
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapBlazorHub();
+                endpoints.MapHub<BoBingHub>(BoBingHub.HubUrl);
                 endpoints.MapFallbackToPage("/_Host");
             });
         }

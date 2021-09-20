@@ -9,16 +9,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Locales\*.json" />
-    <EmbeddedResource Include="Locales\*.json" />
+    <PackageReference Include="BootstrapBlazor" Version="5.11.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BootstrapBlazor" Version="5.10.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
   </ItemGroup>
 
 </Project>
