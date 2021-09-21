@@ -7,11 +7,11 @@ namespace BoBing.Shared.Data
 {
     public class BoBingRules
     {
-        private readonly Dictionary<BoBingAward, BoBingPrize[]> _boBingPrizes = new();
+        private readonly Dictionary<BoBingAwardType, Queue<BoBingPrize>> _boBingPrizes = new();
 
-        public Dictionary<BoBingAward, BoBingPrize[]> BoBingPrizes => _boBingPrizes;
+        public Dictionary<BoBingAwardType, Queue<BoBingPrize>> BoBingPrizes => _boBingPrizes;
 
-        public BoBingRules(Dictionary<BoBingAward, BoBingPrize[]> boBingPrizes)
+        public BoBingRules(Dictionary<BoBingAwardType, Queue<BoBingPrize>> boBingPrizes)
         {
             _boBingPrizes = boBingPrizes;
         }

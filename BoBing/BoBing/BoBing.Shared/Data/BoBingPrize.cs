@@ -11,8 +11,16 @@ namespace BoBing.Shared.Data
     /// </summary>
     public class BoBingPrize
     {
-        public string Name { get; set; }
-        public int Price { get; set; }
+        public BoBingAwardType AwardType { get; }
+        public string Name { get; }
+        public int Price { get; }
+
+        public BoBingPrize(BoBingAwardType awardType, string name, int price)
+        {
+            AwardType = awardType;
+            Name = name;
+            Price = price;
+        }
 
         /// <summary>
         /// 创建奖品
@@ -23,7 +31,7 @@ namespace BoBing.Shared.Data
         /// <param name="award4Count">三红</param>
         /// <param name="award5Count">对堂</param>
         /// <param name="award6Count">状元</param>
-        public static Dictionary<BoBingAward, BoBingPrize[]> CreatePrizes(
+        public static Dictionary<BoBingAwardType, Queue<BoBingPrize>> CreatePrizes(
             int award1Count,
             int award2Count,
             int award3Count,
@@ -31,13 +39,13 @@ namespace BoBing.Shared.Data
             int award5Count,
             int award6Count)
         {
-            Dictionary<BoBingAward, BoBingPrize[]> boBingPrizes = new();
-            boBingPrizes.Add(new BoBingAward1(), Enumerable.Range(0, award1Count).Select(i => new BoBingPrize()).ToArray());
-            boBingPrizes.Add(new BoBingAward2(), Enumerable.Range(0, award2Count).Select(i => new BoBingPrize()).ToArray());
-            boBingPrizes.Add(new BoBingAward3(), Enumerable.Range(0, award3Count).Select(i => new BoBingPrize()).ToArray());
-            boBingPrizes.Add(new BoBingAward4(), Enumerable.Range(0, award4Count).Select(i => new BoBingPrize()).ToArray());
-            boBingPrizes.Add(new BoBingAward5(), Enumerable.Range(0, award5Count).Select(i => new BoBingPrize()).ToArray());
-            boBingPrizes.Add(new BoBingAward6(), Enumerable.Range(0, award6Count).Select(i => new BoBingPrize()).ToArray());
+            Dictionary<BoBingAwardType, Queue<BoBingPrize>> boBingPrizes = new();
+            boBingPrizes.Add(BoBingAwardType.Award1, new Queue<BoBingPrize>(Enumerable.Range(0, award1Count).Select(i => new BoBingPrize(BoBingAwardType.Award1, "", 0))));
+            boBingPrizes.Add(BoBingAwardType.Award2, new Queue<BoBingPrize>(Enumerable.Range(0, award2Count).Select(i => new BoBingPrize(BoBingAwardType.Award2, "", 0))));
+            boBingPrizes.Add(BoBingAwardType.Award3, new Queue<BoBingPrize>(Enumerable.Range(0, award3Count).Select(i => new BoBingPrize(BoBingAwardType.Award3, "", 0))));
+            boBingPrizes.Add(BoBingAwardType.Award4, new Queue<BoBingPrize>(Enumerable.Range(0, award4Count).Select(i => new BoBingPrize(BoBingAwardType.Award4, "", 0))));
+            boBingPrizes.Add(BoBingAwardType.Award5, new Queue<BoBingPrize>(Enumerable.Range(0, award5Count).Select(i => new BoBingPrize(BoBingAwardType.Award5, "", 0))));
+            boBingPrizes.Add(BoBingAwardType.Award6, new Queue<BoBingPrize>(Enumerable.Range(0, award6Count).Select(i => new BoBingPrize(BoBingAwardType.Award6, "", 0))));
             return boBingPrizes;
         }
     }

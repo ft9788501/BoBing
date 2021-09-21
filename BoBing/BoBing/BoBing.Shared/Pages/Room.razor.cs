@@ -12,20 +12,48 @@ namespace BoBing.Shared.Pages
 {
     public partial class Room
     {
-        private BoBingParticipant _localParticipant;
         private BoBingRoom _boBingRoom;
+        private bool isThrowing = false;
 
         [Inject]
         private NavigationManager Navigation { get; set; }
         [Inject]
         private BoBingRoomsService BoBingRoomsService { get; set; }
         [Inject]
+        private BoBingLocalParticipant LocalParticipant { get; set; }
+        [Inject]
         private IJSRuntime JS { get; set; }
+        private BoBingRoom BoBingRoom => _boBingRoom;
+        private bool ThrowingDiceable => LocalParticipant.Is(_boBingRoom.ParticipantTurn) && !isThrowing;
+        private string ThrowButtonText
+        {
+            get
+            {
+                if (ThrowingDiceable || isThrowing)
+                {
+                    return isThrowing ? "等待结果..." : "请投骰子";
+                }
+                else
+                {
+                    return $"等待 {_boBingRoom.ParticipantTurn?.Name} 投骰子...";
+                }
+            }
+        }
 
         private async Task ThrowingDice()
         {
+            if (!ThrowingDiceable)
+            {
+                return;
+            }
             _boBingRoom.RefreshDices();
+            isThrowing = true;
+            StateHasChanged();
             await JS.InvokeVoidAsync("dice", _boBingRoom.Dices, true);
+            await Task.Delay(1500);
+            isThrowing = false;
+            StateHasChanged();
+            _boBingRoom.MoveToNextParticipant();
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -38,6 +66,13 @@ namespace BoBing.Shared.Pages
                 _boBingRoom.DicesChanged += (s, e) =>
                 {
                     JS.InvokeVoidAsync("dice", e, true);
+                };
+                _boBingRoom.ParticipantTurnChanged += (s, e) =>
+                {
+                    InvokeAsync(() =>
+                    {
+                        StateHasChanged();
+                    });
                 };
             }
         }
@@ -67,12 +102,13 @@ namespace BoBing.Shared.Pages
                 }
                 if (query.TryGetValue("participant", out var participantName))
                 {
-                    _localParticipant = _boBingRoom.Participants.FirstOrDefault(p => p.Name == participantName);
-                    if (_localParticipant == null)
+                    var localParticipant = _boBingRoom.Participants.FirstOrDefault(p => p.Name == participantName);
+                    if (localParticipant == null)
                     {
-                        _localParticipant = new BoBingParticipant(participantName);
-                        _boBingRoom.Join(_localParticipant);
+                        localParticipant = new BoBingParticipant(participantName);
+                        _boBingRoom.Join(localParticipant);
                     }
+                    LocalParticipant.SetParticipant(localParticipant);
                 }
             }
             else

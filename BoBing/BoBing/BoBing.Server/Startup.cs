@@ -26,17 +26,13 @@ namespace BoBing.Server
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddResponseCompression((rco) =>
-            {
-                rco.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-                    new[] { "application/octet-stream" });
-            });
 
             services.AddBootstrapBlazor(localizationAction: options =>
             {
                 options.AdditionalJsonAssemblies = new[] { GetType().Assembly };
             });
-
+            
+            services.AddScoped<BoBingLocalParticipant>();
             services.AddSingleton<BoBingRoomsService>();
         }
 
@@ -51,7 +47,6 @@ namespace BoBing.Server
             {
                 app.UseExceptionHandler("/Error");
             }
-            app.UseResponseCompression();
 
             app.UseStaticFiles();
 

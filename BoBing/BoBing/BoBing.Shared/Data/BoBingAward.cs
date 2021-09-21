@@ -10,6 +10,7 @@ namespace BoBing.Shared.Data
     /// </summary>
     public abstract class BoBingAward
     {
+        public abstract BoBingAwardType Type { get; }
         public abstract string Name { get; }
         public abstract string Description { get; }
 
@@ -22,8 +23,28 @@ namespace BoBing.Shared.Data
             {
                 return new BoBingAward6();
             }
+            //444444
+            if (dices.Count(d => d == 4) == 6)
+            {
+                return new BoBingAward6();
+            }
+            //111111
+            if (dices.Count(d => d == 1) == 6)
+            {
+                return new BoBingAward6();
+            }
+            //666666
+            if (dices.Count(d => d == 1) == 6)
+            {
+                return new BoBingAward6();
+            }
             //xxxxxx
             if (dices.GroupBy(d => d).Count() == 1)
+            {
+                return new BoBingAward6();
+            }
+            //44444a
+            if (dices.GroupBy(d => d).Any(g => g.Key == 4 && g.AsEnumerable() is IEnumerable<int> group && group.Count() == 5))
             {
                 return new BoBingAward6();
             }
@@ -67,36 +88,43 @@ namespace BoBing.Shared.Data
     }
     public class BoBingAward0 : BoBingAward
     {
+        public override BoBingAwardType Type => BoBingAwardType.None;
         public override string Name => "黑";
         public override string Description { get; }
     }
     public class BoBingAward1 : BoBingAward
     {
+        public override BoBingAwardType Type => BoBingAwardType.Award1;
         public override string Name => "一秀";
         public override string Description { get; }
     }
     public class BoBingAward2 : BoBingAward
     {
+        public override BoBingAwardType Type => BoBingAwardType.Award2;
         public override string Name => "二举";
         public override string Description { get; }
     }
     public class BoBingAward3 : BoBingAward
     {
+        public override BoBingAwardType Type => BoBingAwardType.Award3;
         public override string Name => "三红";
         public override string Description { get; }
     }
     public class BoBingAward4 : BoBingAward
     {
+        public override BoBingAwardType Type => BoBingAwardType.Award4;
         public override string Name => "四进";
         public override string Description { get; }
     }
     public class BoBingAward5 : BoBingAward
     {
+        public override BoBingAwardType Type => BoBingAwardType.Award5;
         public override string Name => "对堂";
         public override string Description { get; }
     }
     public class BoBingAward6 : BoBingAward
     {
+        public override BoBingAwardType Type => BoBingAwardType.Award6;
         public override string Name => "状元";
         public override string Description { get; }
     }

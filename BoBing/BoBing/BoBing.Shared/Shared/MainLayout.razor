@@ -1,7 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-<Layout SideWidth="300"
-        
+<Layout SideWidth="0"
         IsPage="true"
         ShowGotoTop="true"
         ShowCollapseBar="true"
@@ -19,8 +18,13 @@
     </Header>
     <Side>
         <div class="layout-banner">
+            <div class="layout-title">
+            </div>
         </div>
-        <div class="row g-3">
+        <div class="layout-user">
+            <div class="layout-title">
+                <span>@LocalParticipant.Name</span>
+            </div>
         </div>
     </Side>
     <Main>
