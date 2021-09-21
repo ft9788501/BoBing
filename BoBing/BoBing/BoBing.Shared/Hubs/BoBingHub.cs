@@ -15,6 +15,11 @@ namespace BoBing.Shared.Hubs
             await Clients.All.SendAsync(nameof(BoBing));
         }
 
+        public async Task RefreshDices(IEnumerable<int> dices)
+        {
+            await Clients.All.SendAsync(nameof(RefreshDices), dices);
+        }
+
         public override Task OnConnectedAsync()
         {
             Console.WriteLine($"{Context.ConnectionId} connected");

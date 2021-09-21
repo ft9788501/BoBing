@@ -1,1 +1,11 @@
 ﻿@page "/"
+
+    <div style="width:200px">
+        <Chart ChartType="ChartType.Doughnut"
+               Angle="360"
+               OnInitAsync="@OnInit"
+               OnAfterInitAsync="@OnAfterInit"
+               OnAfterUpdateAsync="@OnAfterUpdate"
+               @ref="DoughnutChart"
+               class="pie" />
+    </div>

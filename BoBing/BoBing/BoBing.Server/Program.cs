@@ -14,6 +14,7 @@ namespace BoBing.Server
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    //webBuilder.UseUrls($"http://0.0.0.0:5000");
                     webBuilder.UseStartup<Startup>();
                 });
     }

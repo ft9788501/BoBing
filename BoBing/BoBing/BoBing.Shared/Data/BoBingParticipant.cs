@@ -10,5 +10,10 @@ namespace BoBing.Shared.Data
         public string Name { get; set; }
 
         public IEnumerable<BoBingAward> Awards { get; }
+
+        public BoBingParticipant(string name)
+        {
+            Name = name;
+        }
     }
 }

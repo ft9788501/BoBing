@@ -1,5 +1,7 @@
 ﻿using BoBing.Shared.Data;
+using BoBing.Shared.Hubs;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.JSInterop;
 using System;
@@ -12,25 +14,39 @@ namespace BoBing.Shared.Pages
 {
     public partial class Room
     {
-        private static readonly Random random = new Random();
+        private BoBingParticipant _localParticipant;
+        private BoBingRoom _boBingRoom;
 
-        private BoBingRoom BoBingRoom { get; set; }
         [Inject]
-        NavigationManager Navigation { get; set; }
+        private NavigationManager Navigation { get; set; }
         [Inject]
-        BoBingRoomsService BoBingRoomsService { get; set; }
+        private BoBingRoomsService BoBingRoomsService { get; set; }
         [Inject]
-        IJSRuntime JS { get; set; }
+        private IJSRuntime JS { get; set; }
 
-        private async Task StartDice()
+        private async Task ThrowingDice()
         {
-            var diceArr = Enumerable.Range(0, 6).Select(x => random.Next(0, 6)).ToArray();
-            await JS.InvokeVoidAsync("dice", diceArr);
+            _boBingRoom.RefreshDices();
+            await JS.InvokeVoidAsync("dice", _boBingRoom.Dices.ToArray(), true);
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+            if (firstRender)
+            {
+                var dices = _boBingRoom.Dices.ToArray();
+                await JS.InvokeVoidAsync("dice", dices, false);
+                _boBingRoom.DicesChanged += (s, e) =>
+                {
+                    JS.InvokeVoidAsync("dice", e, true);
+                };
+            }
         }
 
         protected override void OnParametersSet()
         {
-            //http://xxxxxxxxx/room?room_id=xxxx&pwd=xxx
+            //http://xxxxxxxxx/room?name=xxxx&pwd=xxx&participant=xxxx
             var query = QueryHelpers.ParseQuery(Navigation.ToAbsoluteUri(Navigation.Uri).Query);
             if (query.TryGetValue("name", out var roomName))
             {
@@ -39,22 +55,33 @@ namespace BoBing.Shared.Pages
                     query.TryGetValue("pwd", out var roomPassword);
                     if (string.IsNullOrEmpty(boBingRoom.Password) || boBingRoom.Password == roomPassword)
                     {
-                        BoBingRoom = boBingRoom;
+                        _boBingRoom = boBingRoom;
                     }
                     else
                     {
                         //TODO show alert password error
+                        return;
                     }
                 }
                 else
                 {
-                    BoBingRoom = BoBingRoomsService.CreateRoom(new BoBingRules(), roomName, null);
+                    _boBingRoom = BoBingRoomsService.CreateRoom(new BoBingRules(BoBingPrize.CreatePrizes(32, 16, 8, 4, 2, 1)), roomName, null);
+                }
+                if (query.TryGetValue("participant", out var participantName))
+                {
+                    _localParticipant = _boBingRoom.Participants.FirstOrDefault(p => p.Name == participantName);
+                    if (_localParticipant == null)
+                    {
+                        _localParticipant = new BoBingParticipant(participantName);
+                        _boBingRoom.Join(_localParticipant);
+                    }
                 }
             }
             else
             {
                 //TODO show alert url params error
             }
+            base.OnParametersSet();
         }
     }
 }

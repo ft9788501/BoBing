@@ -3,6 +3,76 @@
 <!DOCTYPE html>
 <html>
 <body>
+    <div class="d-flex align-items-center" style="height: 40px; background-color: #6c757d;">
+        <DropdownWidget>
+            <DropdownWidgetItem Icon="fa fa-hand-pointer-o" BadgeNumber="9" HeaderColor="Color.Danger" BadgeColor="Color.Danger">
+                <BodyTemplate>
+                    <a href="#" class="dropdown-item" @onclick:preventDefault>
+                        <h3 class="position-relative">
+                            一秀剩余
+                            <small class="pull-right">20%</small>
+                        </h3>
+                        <Progress IsAnimated="true" IsStriped="true" Value="20" Color="Color.Primary"></Progress>
+                    </a>
+                </BodyTemplate>
+            </DropdownWidgetItem>
+            <DropdownWidgetItem Icon="fa fa-hand-peace-o" BadgeNumber="9" HeaderColor="Color.Danger" BadgeColor="Color.Danger">
+                <BodyTemplate>
+                    <a href="#" class="dropdown-item" @onclick:preventDefault>
+                        <h3 class="position-relative">
+                            Design some buttons
+                            <small class="pull-right">20%</small>
+                        </h3>
+                        <Progress IsAnimated="true" IsStriped="true" Value="20" Color="Color.Primary"></Progress>
+                    </a>
+                </BodyTemplate>
+            </DropdownWidgetItem>
+            <DropdownWidgetItem Icon="fa fa-hand-lizard-o" BadgeNumber="9" HeaderColor="Color.Danger" BadgeColor="Color.Danger">
+                <BodyTemplate>
+                    <a href="#" class="dropdown-item" @onclick:preventDefault>
+                        <h3 class="position-relative">
+                            Design some buttons
+                            <small class="pull-right">20%</small>
+                        </h3>
+                        <Progress IsAnimated="true" IsStriped="true" Value="20" Color="Color.Primary"></Progress>
+                    </a>
+                </BodyTemplate>
+            </DropdownWidgetItem>
+            <DropdownWidgetItem Icon="fa fa-hand-spock-o" BadgeNumber="9" HeaderColor="Color.Danger" BadgeColor="Color.Danger">
+                <BodyTemplate>
+                    <a href="#" class="dropdown-item" @onclick:preventDefault>
+                        <h3 class="position-relative">
+                            Design some buttons
+                            <small class="pull-right">20%</small>
+                        </h3>
+                        <Progress IsAnimated="true" IsStriped="true" Value="20" Color="Color.Primary"></Progress>
+                    </a>
+                </BodyTemplate>
+            </DropdownWidgetItem>
+            <DropdownWidgetItem Icon="fa fa-hand-paper-o" BadgeNumber="9" HeaderColor="Color.Danger" BadgeColor="Color.Danger">
+                <BodyTemplate>
+                    <a href="#" class="dropdown-item" @onclick:preventDefault>
+                        <h3 class="position-relative">
+                            Design some buttons
+                            <small class="pull-right">20%</small>
+                        </h3>
+                        <Progress IsAnimated="true" IsStriped="true" Value="20" Color="Color.Primary"></Progress>
+                    </a>
+                </BodyTemplate>
+            </DropdownWidgetItem>
+            <DropdownWidgetItem Icon="fa fa-thumbs-o-up" BadgeNumber="9" HeaderColor="Color.Danger" BadgeColor="Color.Danger">
+                <BodyTemplate>
+                    <a href="#" class="dropdown-item" @onclick:preventDefault>
+                        <h3 class="position-relative">
+                            Design some buttons
+                            <small class="pull-right">20%</small>
+                        </h3>
+                        <Progress IsAnimated="true" IsStriped="true" Value="20" Color="Color.Primary"></Progress>
+                    </a>
+                </BodyTemplate>
+            </DropdownWidgetItem>
+        </DropdownWidget>
+    </div>
     <div class="main">
         <div class="bowl" id="dicebox">
             <img class="bg_img" src="_content/BoBing.Shared/images/bowl.jpg" />
@@ -10,7 +80,7 @@
     </div>
 
     <div class="btn-box">
-        <input class="btn" type="button" value="开始" @onclick="StartDice" />
+        <input class="btn" type="button" value="开始" @onclick="ThrowingDice" />
     </div>
 </body>
 </html>
