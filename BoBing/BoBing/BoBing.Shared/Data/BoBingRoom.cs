@@ -11,7 +11,7 @@ namespace BoBing.Shared.Data
     {
         private static readonly Random random = new();
 
-        public event EventHandler<IEnumerable<int>> DicesChanged;
+        public event EventHandler<int[]> DicesChanged;
 
         private readonly List<BoBingParticipant> _boBingParticipants = new();
         private readonly Dictionary<BoBingAward, BoBingPrize[]> _boBingPrizes;
@@ -21,7 +21,7 @@ namespace BoBing.Shared.Data
         public string Password { get; }
         public IEnumerable<BoBingParticipant> Participants => _boBingParticipants;
         public BoBingParticipant ParticipantTurn { get; }
-        public IEnumerable<int> Dices { get; private set; } = Array.Empty<int>();
+        public int[] Dices { get; private set; } = Array.Empty<int>();
 
         public BoBingRoom(BoBingRules rules, string name, string password)
         {

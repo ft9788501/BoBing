@@ -1,5 +1,4 @@
 ﻿using BoBing.Shared.Data;
-using BoBing.Shared.Hubs;
 using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,7 +26,6 @@ namespace BoBing.Server
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSignalR();
             services.AddResponseCompression((rco) =>
             {
                 rco.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
@@ -62,7 +60,6 @@ namespace BoBing.Server
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapBlazorHub();
-                endpoints.MapHub<BoBingHub>(BoBingHub.HubUrl);
                 endpoints.MapFallbackToPage("/_Host");
             });
         }

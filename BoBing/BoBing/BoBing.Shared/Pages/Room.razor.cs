@@ -1,7 +1,5 @@
 ﻿using BoBing.Shared.Data;
-using BoBing.Shared.Hubs;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.JSInterop;
 using System;
@@ -27,7 +25,7 @@ namespace BoBing.Shared.Pages
         private async Task ThrowingDice()
         {
             _boBingRoom.RefreshDices();
-            await JS.InvokeVoidAsync("dice", _boBingRoom.Dices.ToArray(), true);
+            await JS.InvokeVoidAsync("dice", _boBingRoom.Dices, true);
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -35,7 +33,7 @@ namespace BoBing.Shared.Pages
             await base.OnAfterRenderAsync(firstRender);
             if (firstRender)
             {
-                var dices = _boBingRoom.Dices.ToArray();
+                var dices = _boBingRoom.Dices;
                 await JS.InvokeVoidAsync("dice", dices, false);
                 _boBingRoom.DicesChanged += (s, e) =>
                 {
