@@ -9,10 +9,19 @@
         IsFixedFooter="false"
         ShowFooter="false"
         UseTabSet="false"
+        TooltipText=""
         AdditionalAssemblies="new[] { GetType().Assembly }">
     <Header>
-        <span class="ms-3 flex-sm-fill d-sm-block">2021安卓博饼房间</span>
-        <div class="flex-fill d-sm-none">
+        <span class=" flex-sm-fill "></span>
+        <div class="ms-3 flex-sm-fill d-sm-block">
+            <DropdownWidget>
+                <DropdownWidgetItem ShowArrow="false" Icon="fa fa-hand-pointer-o" BadgeNumber="@BoBingLocalService.PrizesPool.GetPrizesRemainingCount(Data.BoBingAwardType.Award1).ToString()" BadgeColor="Color.Success" />
+                <DropdownWidgetItem ShowArrow="false" Icon="fa fa-hand-peace-o" BadgeNumber="@BoBingLocalService.PrizesPool.GetPrizesRemainingCount(Data.BoBingAwardType.Award2).ToString()" BadgeColor="Color.Success" />
+                <DropdownWidgetItem ShowArrow="false" Icon="fa fa-hand-spock-o" BadgeNumber="@BoBingLocalService.PrizesPool.GetPrizesRemainingCount(Data.BoBingAwardType.Award3).ToString()" BadgeColor="Color.Success" />
+                <DropdownWidgetItem ShowArrow="false" Icon="fa fa-hand-lizard-o" BadgeNumber="@BoBingLocalService.PrizesPool.GetPrizesRemainingCount(Data.BoBingAwardType.Award4).ToString()" BadgeColor="Color.Success" />
+                <DropdownWidgetItem ShowArrow="false" Icon="fa fa-hand-paper-o" BadgeNumber="@BoBingLocalService.PrizesPool.GetPrizesRemainingCount(Data.BoBingAwardType.Award5).ToString()" BadgeColor="Color.Success" />
+                <DropdownWidgetItem ShowArrow="false" Icon="fa fa-thumbs-o-up" BadgeNumber="@BoBingLocalService.PrizesPool.GetPrizesRemainingCount(Data.BoBingAwardType.Award6).ToString()" BadgeColor="Color.Success" />
+            </DropdownWidget>
         </div>
         <div class="layout-drawer" @onclick="@(e => IsOpen = !IsOpen)"><i class="fa fa-gavel"></i></div>
     </Header>
@@ -23,7 +32,7 @@
         </div>
         <div class="layout-user">
             <div class="layout-title">
-                <span>@LocalParticipant.Name</span>
+                <span>@BoBingLocalService.LocalParticipantName</span>
             </div>
         </div>
     </Side>

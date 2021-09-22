@@ -17,12 +17,12 @@ namespace BoBing.Shared.Data
         public BoBingRoom CreateRoom(BoBingRules rules, string name, string password)
         {
             BoBingRoom boBingRoom = new(rules, name, password);
-            boBingRooms.TryAdd(boBingRoom.Name, boBingRoom);
+            boBingRooms.TryAdd(boBingRoom.RoomName, boBingRoom);
             return boBingRoom;
         }
         public void DelectRoom(BoBingRoom boBingRoom)
         {
-            boBingRooms.TryRemove(boBingRoom.Name, out boBingRoom);
+            boBingRooms.TryRemove(boBingRoom.RoomName, out boBingRoom);
         }
     }
 }

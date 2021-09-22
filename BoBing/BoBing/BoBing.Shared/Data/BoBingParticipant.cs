@@ -7,18 +7,20 @@ namespace BoBing.Shared.Data
 {
     public class BoBingParticipant
     {
-        private List<BoBingPrize> _boBingPrizes = new List<BoBingPrize>();
+        private readonly BoBingRoom _room;
+        private readonly List<BoBingPrize> _boBingPrizes = new();
 
-        public virtual string Name { get;  }
+        public string Name { get; }
 
-        public virtual IEnumerable<BoBingPrize> Prizes => _boBingPrizes;
+        public IEnumerable<BoBingPrize> Prizes => _boBingPrizes;
 
-        public BoBingParticipant(string name)
+        public BoBingParticipant(BoBingRoom room, string name)
         {
+            _room = room;
             Name = name;
         }
 
-        public virtual void AddPrize(BoBingPrize boBingPrize)
+        public void AddPrize(BoBingPrize boBingPrize)
         {
             _boBingPrizes.Add(boBingPrize);
         }

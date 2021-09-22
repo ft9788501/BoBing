@@ -14,21 +14,21 @@ namespace BoBing.Shared.Shared
     {
         private bool IsOpen { get; set; }
         [Inject]
-        private BoBingLocalParticipant LocalParticipant { get; set; }
+        private BoBingLocalService BoBingLocalService { get; set; }
 
         /// <summary>
         /// OnInitialized 方法
         /// </summary>
         protected override async Task OnInitializedAsync()
         {
-            LocalParticipant.PropertyChanged -= LocalParticipant_PropertyChanged;
-            LocalParticipant.PropertyChanged += LocalParticipant_PropertyChanged;
+            BoBingLocalService.PropertyChanged += (s, e) =>
+            {
+                InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+            };
             await base.OnInitializedAsync();
-        }
-
-        private void LocalParticipant_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            StateHasChanged();
         }
     }
 }

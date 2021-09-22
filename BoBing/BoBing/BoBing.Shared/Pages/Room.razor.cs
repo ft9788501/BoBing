@@ -13,6 +13,7 @@ namespace BoBing.Shared.Pages
     public partial class Room
     {
         private BoBingRoom _boBingRoom;
+        private BoBingParticipant _localParticipant;
         private bool isThrowing = false;
 
         [Inject]
@@ -20,11 +21,10 @@ namespace BoBing.Shared.Pages
         [Inject]
         private BoBingRoomsService BoBingRoomsService { get; set; }
         [Inject]
-        private BoBingLocalParticipant LocalParticipant { get; set; }
+        private BoBingLocalService BoBingLocalService { get; set; }
         [Inject]
         private IJSRuntime JS { get; set; }
-        private BoBingRoom BoBingRoom => _boBingRoom;
-        private bool ThrowingDiceable => LocalParticipant.Is(_boBingRoom.ParticipantTurn) && !isThrowing;
+        private bool ThrowingDiceable => (_localParticipant == _boBingRoom.ParticipantTurn) && !isThrowing;
         private string ThrowButtonText
         {
             get
@@ -53,7 +53,6 @@ namespace BoBing.Shared.Pages
             await Task.Delay(1500);
             isThrowing = false;
             StateHasChanged();
-            _boBingRoom.MoveToNextParticipant();
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -63,9 +62,9 @@ namespace BoBing.Shared.Pages
             {
                 var dices = _boBingRoom.Dices;
                 await JS.InvokeVoidAsync("dice", dices, false);
-                _boBingRoom.DicesChanged += (s, e) =>
+                _boBingRoom.DicesChanged += async (s, e) =>
                 {
-                    JS.InvokeVoidAsync("dice", e, true);
+                    await JS.InvokeVoidAsync("dice", e, true);
                 };
                 _boBingRoom.ParticipantTurnChanged += (s, e) =>
                 {
@@ -73,6 +72,10 @@ namespace BoBing.Shared.Pages
                     {
                         StateHasChanged();
                     });
+                };
+                _boBingRoom.PrizesPool.PrizesChanged += (s,e) =>
+                {
+                    BoBingLocalService.RefreshPrizesPool();
                 };
             }
         }
@@ -98,17 +101,17 @@ namespace BoBing.Shared.Pages
                 }
                 else
                 {
-                    _boBingRoom = BoBingRoomsService.CreateRoom(new BoBingRules(BoBingPrize.CreatePrizes(32, 16, 8, 4, 2, 1)), roomName, null);
+                    _boBingRoom = BoBingRoomsService.CreateRoom(new BoBingRules(new BoBingPrizesPoolOption(32, 16, 8, 4, 2, 1)), roomName, null);
                 }
+                BoBingLocalService.PrizesPool = _boBingRoom.PrizesPool;
                 if (query.TryGetValue("participant", out var participantName))
                 {
-                    var localParticipant = _boBingRoom.Participants.FirstOrDefault(p => p.Name == participantName);
-                    if (localParticipant == null)
+                    BoBingLocalService.LocalParticipantName = participantName;
+                    _localParticipant = _boBingRoom.Participants.FirstOrDefault(p => p.Name == participantName);
+                    if (_localParticipant == null)
                     {
-                        localParticipant = new BoBingParticipant(participantName);
-                        _boBingRoom.Join(localParticipant);
+                        _localParticipant = _boBingRoom.Join(participantName);
                     }
-                    LocalParticipant.SetParticipant(localParticipant);
                 }
             }
             else

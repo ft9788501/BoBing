@@ -31,8 +31,8 @@ namespace BoBing.Server
             {
                 options.AdditionalJsonAssemblies = new[] { GetType().Assembly };
             });
-            
-            services.AddScoped<BoBingLocalParticipant>();
+
+            services.AddScoped<BoBingLocalService>();
             services.AddSingleton<BoBingRoomsService>();
         }
 
